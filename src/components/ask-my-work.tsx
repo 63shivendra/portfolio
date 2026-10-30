@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Search, Sparkles } from "lucide-react";
-import { domains, projects, type Project } from "@/content/site";
+import { projects, type Project } from "@/content/site";
+import { getProjectVisual } from "@/content/project-visuals";
 
 type SearchEntry = {
   id: string;
@@ -18,13 +19,23 @@ type SearchEntry = {
 
 const sectionEntries: SearchEntry[] = [
   {
+    id: "section-why",
+    type: "section",
+    title: "Why hire",
+    description: "Research depth, trust, systems judgment and product instinct — with the proof for each.",
+    meta: "SECTION",
+    accent: "#c8f751",
+    keywords: "why hire recruiter research trust systems product role fit",
+    href: "#why",
+  },
+  {
     id: "section-work",
     type: "section",
     title: "Selected work",
-    description: "24 project briefs, ordered by relevance to research and security teams.",
+    description: "24 project briefs in 7 categories, with a lead case study in every category.",
     meta: "SECTION",
     accent: "#ff6b4a",
-    keywords: "work projects portfolio systems fraud retrieval vision federated",
+    keywords: "work projects portfolio systems fraud retrieval vision federated categories",
     href: "#work",
   },
   {
@@ -70,14 +81,14 @@ const sectionEntries: SearchEntry[] = [
 ];
 
 const projectEntries: SearchEntry[] = projects.map((project) => {
-  const domain = domains.find((item) => item.key === project.domain);
+  const visual = getProjectVisual(project.slug);
   return {
     id: `brief-${project.slug}`,
     type: "brief",
     title: project.title,
     description: project.subtitle,
     meta: project.stack.slice(0, 3).join(" · "),
-    accent: domain?.color ?? "#c8f751",
+    accent: visual.accent,
     keywords: [
       project.title,
       project.subtitle,
@@ -273,24 +284,43 @@ export function AskMyWork() {
                 <span>Briefs + sections</span>
               </div>
               <div className="max-h-[21rem] overflow-y-auto p-1.5">
-                {results.map((entry, index) => (
-                  <button
-                    key={entry.id}
-                    type="button"
-                    onClick={() => openEntry(entry)}
-                    onPointerEnter={() => setActiveIndex(index)}
-                    className={`flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left transition-colors ${
-                      index === activeIndex ? "bg-panel-2" : "hover:bg-panel-2"
-                    }`}
-                  >
-                    <span
-                      className="mt-1.5 size-1.5 shrink-0 rounded-full"
-                      style={{
-                        background: entry.accent,
-                        boxShadow: `0 0 8px ${entry.accent}`,
-                      }}
-                    />
-                    <span className="min-w-0 flex-1">
+                {results.map((entry, index) => {
+                  const ResultIcon = entry.project
+                    ? getProjectVisual(entry.project.slug).icon
+                    : null;
+                  return (
+                    <button
+                      key={entry.id}
+                      type="button"
+                      data-search-result
+                      onClick={() => openEntry(entry)}
+                      onPointerEnter={() => setActiveIndex(index)}
+                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors ${
+                        index === activeIndex ? "bg-panel-2" : "hover:bg-panel-2"
+                      }`}
+                    >
+                      {ResultIcon ? (
+                        <span
+                          className="search-result-icon"
+                          aria-hidden="true"
+                          style={{
+                            color: entry.accent,
+                            borderColor: `${entry.accent}55`,
+                            background: `${entry.accent}12`,
+                          }}
+                        >
+                          <ResultIcon strokeWidth={1.5} />
+                        </span>
+                      ) : (
+                        <span
+                          className="size-1.5 shrink-0 rounded-full"
+                          style={{
+                            background: entry.accent,
+                            boxShadow: `0 0 8px ${entry.accent}`,
+                          }}
+                        />
+                      )}
+                      <span className="min-w-0 flex-1">
                       <span className="flex items-center gap-2">
                         <span className="truncate text-[12px] text-chalk">
                           {entry.title}
@@ -304,11 +334,12 @@ export function AskMyWork() {
                       </span>
                     </span>
                     <ArrowRight
-                      className="mt-1 size-3 shrink-0 text-faint"
+                      className="size-3 shrink-0 text-faint"
                       strokeWidth={1.6}
                     />
-                  </button>
-                ))}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           ) : (

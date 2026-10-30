@@ -1,59 +1,60 @@
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { navItems, site } from "@/content/site";
 import { LocalTime } from "@/components/local-time";
 
 export function Footer() {
   return (
-    <footer className="relative z-10 border-t border-line">
-      <div className="container-x py-8">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            <span className="grid size-8 place-items-center rounded-md border border-line-2 bg-panel font-mono text-[10px] tracking-[0.12em] text-lime">
+    <footer className="footer-shell relative z-10 border-t border-line">
+      <div className="container-x py-9">
+        <div className="footer-top">
+          <a href="#top" className="flex items-center gap-3">
+            <span className="grid size-9 place-items-center rounded-full border border-line-2 bg-panel font-mono text-[10px] tracking-[0.12em] text-lime">
               {site.initials}
             </span>
             <div>
-              <div className="text-[11px] text-dim">
-                © 2026 {site.name}
-              </div>
+              <div className="text-[12px] font-medium text-chalk">{site.name}</div>
               <div className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.12em] text-faint">
-                Next.js 16 · Three.js · no template
+                Research AI Engineer · Hyderabad
               </div>
             </div>
-          </div>
+          </a>
 
-          <nav
-            className="flex flex-wrap items-center gap-x-5 gap-y-2"
-            aria-label="Footer navigation"
-          >
+          <div className="footer-status">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="size-1.5 rounded-full bg-mint" />
+              {site.availability}
+            </span>
+            <span className="hidden h-3 w-px bg-line-2 sm:block" />
+            <span>
+              <LocalTime /> local
+            </span>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <nav aria-label="Footer navigation" className="footer-nav">
             {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="text-[11px] text-faint transition-colors hover:text-chalk"
-              >
+              <a key={item.href} href={item.href}>
                 {item.label}
               </a>
             ))}
           </nav>
 
-          <div className="flex items-center gap-5 font-mono text-[8px] uppercase tracking-[0.14em] text-faint">
-            <a
-              href={site.codolio}
-              target="_blank"
-              rel="noreferrer"
-              className="hidden transition-colors hover:text-lime sm:inline"
-            >
-              Codolio ↗
-            </a>
-            <LocalTime />
-            <a
-              href="#top"
-              aria-label="Back to top"
-              className="grid size-8 place-items-center rounded-full border border-line transition-colors hover:border-line-2 hover:text-chalk"
-            >
-              <ArrowUp className="size-3.5" strokeWidth={1.6} />
+          <div className="footer-meta">
+            <span>24 projects · 7 categories</span>
+            <span className="hidden sm:inline">·</span>
+            <span>Next.js 16 · static export</span>
+            <span className="hidden sm:inline">·</span>
+            <span>© 2026</span>
+            <a href={site.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="footer-social">
+              <ArrowUpRight className="size-3" strokeWidth={1.6} />
             </a>
           </div>
+
+          <a href="#top" className="footer-top-link" aria-label="Back to top">
+            Top
+            <ArrowUp className="size-3" strokeWidth={1.7} />
+          </a>
         </div>
       </div>
     </footer>

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./visual-system.css";
 
 @theme {
   --color-ink: #07080b;
@@ -134,24 +135,6 @@
   }
 }
 
-/* Light theme overrides. Utilities resolve these variables at runtime. */
-html.light {
-  --color-ink: #f6f5f1;
-  --color-ink-2: #efeee9;
-  --color-panel: #ffffff;
-  --color-panel-2: #faf9f6;
-  --color-line: #e2e0d8;
-  --color-line-2: #cfccc2;
-  --color-chalk: #14161b;
-  --color-dim: #565d6d;
-  --color-faint: #7d8494;
-  --color-lime: #3f6b0a;
-  --color-lime-dim: #4d7d12;
-  --color-mint: #0f766e;
-  --color-alert: #c2410c;
-  --color-on-accent: #f7f8f4;
-}
-
 @layer base {
   * {
     border-color: var(--color-line);
@@ -160,10 +143,6 @@ html.light {
   html {
     color-scheme: dark;
     -webkit-text-size-adjust: 100%;
-  }
-
-  html.light {
-    color-scheme: light;
   }
 
   body {
@@ -213,18 +192,6 @@ html.light {
       transparent 72%
     );
     filter: blur(30px);
-  }
-
-  html.light body::before {
-    opacity: 0.32;
-  }
-
-  html.light body::after {
-    background: radial-gradient(
-      closest-side,
-      color-mix(in oklab, var(--color-lime) 7%, transparent),
-      transparent 72%
-    );
   }
 
   ::selection {
@@ -671,10 +638,6 @@ html.light {
     animation: drift-a 22s ease-in-out infinite alternate-reverse;
   }
 
-  html.light .ambient-glow {
-    opacity: 0.32;
-  }
-
   /* Film grain keeps the near-black from looking like a flat void. */
   .grain {
     position: fixed;
@@ -684,10 +647,6 @@ html.light {
     opacity: 0.055;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
     mix-blend-mode: overlay;
-  }
-
-  html.light .grain {
-    opacity: 0.035;
   }
 
   /* A light that travels along section rules. */
@@ -786,10 +745,6 @@ html.light {
 
   .hero-field[data-ready="true"] {
     opacity: 0.78;
-  }
-
-  html.light .hero-field {
-    opacity: 0 !important;
   }
 
   @media (max-width: 767px) {

@@ -1,34 +1,38 @@
-import { experience, trajectory } from "@/content/site";
+import {
+  ArrowUpRight,
+  BriefcaseBusiness,
+  GraduationCap,
+  Rocket,
+  ShieldCheck,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import type { CSSProperties } from "react";
+import { experience, projects, trajectory } from "@/content/site";
 
-const kindStyles: Record<string, string> = {
-  Current: "border-mint/30 bg-mint/10 text-mint",
-  Education: "border-line-2 bg-panel text-dim",
-  Independent: "border-line-2 bg-panel text-dim",
-  Industry: "border-line-2 bg-panel text-dim",
+const kinds: Record<
+  string,
+  { icon: LucideIcon; color: string; label: string }
+> = {
+  Current: { icon: ShieldCheck, color: "#5eead4", label: "Current" },
+  Education: { icon: GraduationCap, color: "#a78bfa", label: "Education" },
+  Independent: { icon: Rocket, color: "#fbbf24", label: "Independent" },
+  Industry: { icon: BriefcaseBusiness, color: "#94a3b8", label: "Industry" },
 };
 
 function Trajectory() {
   return (
-    <div className="mb-10 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+    <div className="trajectory-strip" data-reveal>
+      <span aria-hidden className="trajectory-line" />
       {trajectory.map((step, index) => (
-        <div key={step.title} className="group relative bg-ink p-4 lg:p-5">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[8px] tracking-[0.1em] text-faint">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <span
-              className="size-1.5 rounded-full"
-              style={{ backgroundColor: step.color }}
-            />
+        <div key={step.title} className="trajectory-step">
+          <span className="trajectory-dot" style={{ "--step": step.color } as CSSProperties}>
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <div className="trajectory-copy">
+            <span className="trajectory-period">{step.period}</span>
+            <span className="trajectory-title">{step.title}</span>
+            <span className="trajectory-note">{step.note}</span>
           </div>
-          <div className="mt-5 font-mono text-[9px] uppercase tracking-[0.12em] text-dim">
-            {step.period}
-          </div>
-          <div className="mt-1 text-[13px] font-medium text-chalk">
-            {step.title}
-          </div>
-          <div className="mt-0.5 text-[10px] text-faint">{step.note}</div>
-          <span className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-lime/60 transition-transform duration-300 group-hover:scale-x-100" />
         </div>
       ))}
     </div>
@@ -39,53 +43,67 @@ export function Experience() {
   return (
     <div>
       <Trajectory />
-      <div className="border-t border-line">
-        {experience.map((item, index) => (
-          <div
-            key={`${item.org}-${item.period}`}
-            data-reveal
-            style={{ "--reveal-delay": `${index * 60}ms` } as React.CSSProperties}
-            className="grid gap-4 border-b border-line py-8 sm:grid-cols-[142px_1fr] sm:gap-8 lg:grid-cols-[180px_1fr] lg:py-10"
-          >
-            <div>
-              <div className="font-mono text-[10px] tracking-[0.08em] text-dim">
-                {item.period}
-              </div>
-              <span
-                className={`mt-2.5 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[8px] uppercase tracking-[0.14em] ${kindStyles[item.kind]}`}
-              >
-                {item.kind === "Current" ? (
-                  <span className="size-1 rounded-full bg-mint" />
-                ) : null}
-                {item.kind}
-              </span>
-            </div>
 
-            <div>
-              <h3 className="text-[17px] font-medium tracking-[-0.01em] text-chalk">
-                {item.role}
-              </h3>
-              <div className="mt-1 text-[12px] text-dim">
-                {item.org}
-                <span className="text-faint"> · {item.location}</span>
+      <div className="timeline">
+        <span aria-hidden className="timeline-line" />
+        {experience.map((item, index) => {
+          const kind = kinds[item.kind] ?? kinds.Industry;
+          const Icon = kind.icon;
+          const proofs = (item.proofs ?? [])
+            .map((slug) => projects.find((project) => project.slug === slug))
+            .filter((project): project is (typeof projects)[number] => Boolean(project));
+
+          return (
+            <article
+              key={`${item.org}-${item.period}`}
+              data-reveal
+              style={{ "--reveal-delay": `${index * 60}ms`, "--step": kind.color } as CSSProperties}
+              className={`timeline-item ${item.kind === "Current" ? "timeline-item--current" : ""}`}
+            >
+              <div className="timeline-rail">
+                <span className="timeline-icon">
+                  <Icon strokeWidth={1.5} />
+                </span>
+                <span className="timeline-node" />
               </div>
-              <p className="mt-3 max-w-2xl text-[13px] leading-relaxed text-dim">
-                {item.summary}
-              </p>
-              <ul className="mt-3 space-y-1.5">
-                {item.bullets.map((bullet) => (
-                  <li
-                    key={bullet}
-                    className="flex max-w-2xl gap-2.5 text-[13px] leading-relaxed text-dim"
-                  >
-                    <span className="mt-[7px] size-1 shrink-0 rounded-full bg-lime/70" />
-                    {bullet}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ))}
+
+              <div className="timeline-card">
+                <div className="timeline-meta">
+                  <span className="timeline-period">{item.period}</span>
+                  <span className="timeline-kind">{kind.label}</span>
+                </div>
+                <h3 className="timeline-role">{item.role}</h3>
+                <div className="timeline-org">
+                  {item.org}
+                  <span> · {item.location}</span>
+                </div>
+                <p className="timeline-summary">{item.summary}</p>
+                <ul className="timeline-bullets">
+                  {item.bullets.map((bullet) => (
+                    <li key={bullet}>
+                      <span className="timeline-bullet" />
+                      {bullet}
+                    </li>
+                  ))}
+                </ul>
+
+                {proofs.length ? (
+                  <div className="timeline-proofs">
+                    <span className="font-mono text-[8px] uppercase tracking-[0.14em] text-faint">
+                      Proof
+                    </span>
+                    {proofs.map((project) => (
+                      <a key={project.slug} href={`#${project.slug}`} className="timeline-proof">
+                        {project.title}
+                        <ArrowUpRight className="size-2.5" strokeWidth={1.8} />
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            </article>
+          );
+        })}
       </div>
     </div>
   );

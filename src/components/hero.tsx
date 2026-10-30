@@ -3,12 +3,12 @@ import {
   ArrowUpRight,
   BriefcaseBusiness,
   Code2,
+  Compass,
   FileText,
-  FlaskConical,
   Layers,
   Mail,
   MapPin,
-  UserRound,
+  Route,
   UserRoundSearch,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -18,8 +18,8 @@ import { AskMyWork } from "@/components/ask-my-work";
 import { InferenceCard } from "@/components/inference-card";
 import { CountUp } from "@/components/count-up";
 import { Ticker } from "@/components/ticker";
-import { RoleFit } from "@/components/role-fit";
 import { HeroField } from "@/components/hero-field";
+import { HeroAtmosphere } from "@/components/hero-atmosphere";
 
 const quickLinks: {
   label: string;
@@ -27,10 +27,10 @@ const quickLinks: {
   icon: LucideIcon;
   color: string;
 }[] = [
-  { label: "Me", href: "#about", icon: UserRound, color: "#5eead4" },
-  { label: "Projects", href: "#work", icon: BriefcaseBusiness, color: "#c8f751" },
+  { label: "Why hire", href: "#why", icon: Compass, color: "#c8f751" },
+  { label: "Projects", href: "#work", icon: BriefcaseBusiness, color: "#5eead4" },
   { label: "Skills", href: "#skills", icon: Layers, color: "#a78bfa" },
-  { label: "Research", href: "#experience", icon: FlaskConical, color: "#fbbf24" },
+  { label: "Path", href: "#experience", icon: Route, color: "#fbbf24" },
   { label: "Contact", href: "#contact", icon: UserRoundSearch, color: "#ff6b4a" },
 ];
 
@@ -49,7 +49,8 @@ function HeroPortrait() {
 
 export function Hero() {
   return (
-    <section id="top" className="relative z-10 overflow-hidden">
+    <section id="top" data-section="top" className="relative z-10 overflow-hidden">
+      <HeroAtmosphere />
       <div className="relative">
         <HeroField />
         <div className="container-x relative z-10 pt-32 pb-14 sm:pt-36 lg:pt-40 lg:pb-20">
@@ -64,6 +65,9 @@ export function Hero() {
                   </p>
                   <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.14em] text-faint">
                     {site.focus}
+                  </p>
+                  <p className="mt-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-dim/80">
+                    {site.profileLine}
                   </p>
                 </div>
               </div>
@@ -177,8 +181,6 @@ export function Hero() {
           </div>
         </div>
       </div>
-
-      <RoleFit />
 
       <div className="border-t border-line">
         <div className="container-x">

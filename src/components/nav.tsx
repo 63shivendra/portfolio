@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/brand-icons";
 import { navItems, site } from "@/content/site";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -76,7 +75,7 @@ export function Nav() {
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
         scrolled || open
           ? "border-b border-line bg-ink/85 backdrop-blur-xl"
-          : "border-b border-transparent"
+          : "border-b border-transparent bg-gradient-to-b from-ink/85 via-ink/35 to-transparent"
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between gap-6">
@@ -95,7 +94,7 @@ export function Nav() {
         </a>
 
         <nav
-          className="hidden items-center gap-7 md:flex"
+          className="hidden items-center gap-7 lg:flex"
           aria-label="Primary navigation"
         >
           {navItems.map((item) => {
@@ -119,7 +118,6 @@ export function Nav() {
         </nav>
 
         <div className="flex items-center gap-2.5">
-          <ThemeToggle />
           <Link
             href={site.resume}
             className="hidden h-9 items-center gap-1.5 rounded-full border border-line-2 bg-panel/60 px-4 font-mono text-[10px] uppercase tracking-[0.14em] text-chalk transition-colors hover:border-faint hover:bg-panel sm:inline-flex"
@@ -134,7 +132,7 @@ export function Nav() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="grid size-9 place-items-center rounded-full border border-line text-dim transition-colors hover:text-chalk md:hidden"
+            className="grid size-9 place-items-center rounded-full border border-line text-dim transition-colors hover:text-chalk lg:hidden"
           >
             {open ? (
               <X className="size-4" strokeWidth={1.7} />
@@ -147,7 +145,7 @@ export function Nav() {
 
       <div
         id="mobile-nav"
-        className={`overflow-hidden border-t border-line bg-ink/95 backdrop-blur-xl transition-[max-height,opacity] duration-300 md:hidden ${
+        className={`overflow-hidden border-t border-line bg-ink/95 backdrop-blur-xl transition-[max-height,opacity] duration-300 lg:hidden ${
           open ? "max-h-[26rem] opacity-100" : "max-h-0 border-t-transparent opacity-0"
         }`}
       >

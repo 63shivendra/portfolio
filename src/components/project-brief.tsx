@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { ArrowUpRight, X } from "lucide-react";
 import { domains, type Project } from "@/content/site";
-import { ProjectGlyph } from "@/components/project-glyph";
+import { getProjectVisual } from "@/content/project-visuals";
+import { ProjectArt } from "@/components/project-art";
 
 type ProjectBriefProps = {
   project: Project | null;
@@ -75,7 +76,9 @@ export function ProjectBrief({ project, onClose }: ProjectBriefProps) {
   if (!project) return null;
 
   const domain = domains.find((item) => item.key === project.domain) ?? domains[0];
-  const accent = domain.color;
+  const visual = getProjectVisual(project.slug);
+  const accent = visual.accent;
+  const Icon = visual.icon;
 
   return createPortal(
     <div
@@ -115,30 +118,45 @@ export function ProjectBrief({ project, onClose }: ProjectBriefProps) {
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
           <div className="px-5 pt-5 sm:px-7 sm:pt-6">
-            <ProjectGlyph
-              kind={project.glyph}
-              accent={accent}
-              title={project.title}
-              large
-            />
+            <ProjectArt project={project} size="wide" />
           </div>
 
           <div className="px-5 py-6 sm:px-7 sm:py-7">
             <div className="font-mono text-[9px] uppercase tracking-[0.18em] text-faint">
               Project brief / {project.hook}
             </div>
-            <h2
-              id="project-brief-title"
-              className="display mt-2 text-[clamp(2rem,5vw,3.2rem)] text-chalk"
-            >
-              {project.title}
-            </h2>
+            <div className="mt-2 flex items-start gap-3">
+              <span
+                className="project-icon project-icon--lg"
+                data-project-icon={project.slug}
+                aria-hidden="true"
+                style={{ "--project": accent } as CSSProperties}
+              >
+                <Icon strokeWidth={1.45} />
+              </span>
+              <h2
+                id="project-brief-title"
+                className="display text-[clamp(2rem,5vw,3.2rem)] text-chalk"
+              >
+                {project.title}
+              </h2>
+            </div>
             <p
               className="mt-4 border-l-2 pl-3 text-[15px] leading-relaxed text-chalk/90"
               style={{ borderColor: accent }}
             >
               {project.tagline}
             </p>
+            <div className="project-stack-top project-brief-stack" data-project-stack>
+              <span className="project-stack-label">Stack</span>
+              <div className="project-stack-chips">
+                {project.stack.map((item) => (
+                  <span key={item} className="project-stack-chip">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
             <p
               id="project-brief-summary"
               className="mt-5 text-[13.5px] leading-7 text-dim"
@@ -205,20 +223,6 @@ export function ProjectBrief({ project, onClose }: ProjectBriefProps) {
 
               <section>
                 <h3 className="font-mono text-[9px] uppercase tracking-[0.18em] text-faint">
-                  Tech involved
-                </h3>
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {project.stack.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-full border border-line bg-panel/60 px-2 py-1 font-mono text-[8px] uppercase tracking-[0.08em] text-dim"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-
-                <h3 className="mt-6 font-mono text-[9px] uppercase tracking-[0.18em] text-faint">
                   Repositories
                 </h3>
                 <div className="mt-3 space-y-2">

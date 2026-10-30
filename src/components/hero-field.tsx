@@ -212,7 +212,6 @@ function mountField(
   }
 
   let visible = true;
-  let light = document.documentElement.classList.contains("light");
   let raf = 0;
   let lastFrame = 0;
 
@@ -237,7 +236,7 @@ function mountField(
 
   const frame = (now: number) => {
     raf = 0;
-    if (!visible || document.hidden || light) return;
+    if (!visible || document.hidden) return;
 
     if (now - lastFrame < 32) {
       raf = requestAnimationFrame(frame);
@@ -252,7 +251,7 @@ function mountField(
   };
 
   const kick = () => {
-    if (reduceMotion || raf || !visible || document.hidden || light) return;
+    if (reduceMotion || raf || !visible || document.hidden) return;
     raf = requestAnimationFrame(frame);
   };
 
@@ -280,30 +279,12 @@ function mountField(
   intersectionObserver.observe(host);
   document.addEventListener("visibilitychange", onVisibility);
 
-  const themeObserver = new MutationObserver(() => {
-    const nextLight = document.documentElement.classList.contains("light");
-    if (nextLight === light) return;
-    light = nextLight;
-
-    if (light) {
-      cancelAnimationFrame(raf);
-      raf = 0;
-    } else {
-      kick();
-    }
-  });
-  themeObserver.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["class"],
-  });
-
   kick();
 
   return () => {
     cancelAnimationFrame(raf);
     intersectionObserver.disconnect();
     resizeObserver.disconnect();
-    themeObserver.disconnect();
     document.removeEventListener("visibilitychange", onVisibility);
     window.removeEventListener("pointermove", onPointerMove);
 

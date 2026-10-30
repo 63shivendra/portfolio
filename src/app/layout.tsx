@@ -88,13 +88,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#07080b" },
-    { media: "(prefers-color-scheme: light)", color: "#f6f5f1" },
-  ],
+  themeColor: "#07080b",
 };
 
-const themeScript = `(function(){try{var s=localStorage.getItem('theme');if(s==='light'){document.documentElement.classList.add('light');}document.documentElement.classList.add('js');}catch(e){document.documentElement.classList.add('js');}})();`;
+const bootScript = `document.documentElement.classList.add('js');`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -104,7 +101,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
         <a href="#main" className="skip-link">
           Skip to content
         </a>

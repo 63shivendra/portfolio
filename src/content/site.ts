@@ -22,6 +22,7 @@ export const site = {
   location: "Hyderabad, India",
   timezone: "IST · UTC+5:30",
   availability: "Open to remote / hybrid",
+  profileLine: "NPCI · IIIT Hyderabad M.Tech '26 · ex-Infosys",
   github: "https://github.com/63shivendra",
   linkedin: "https://www.linkedin.com/in/shivendra-pratap63/",
   codolio: "https://codolio.com/profile/hex/problemSolving/leetcode",
@@ -31,6 +32,7 @@ export const site = {
 };
 
 export const navItems = [
+  { label: "Why hire", href: "#why" },
   { label: "Work", href: "#work" },
   { label: "Experience", href: "#experience" },
   { label: "Skills", href: "#skills" },
@@ -136,6 +138,69 @@ export const roleLenses: RoleLens[] = [
   },
 ];
 
+/**
+ * The recruiter narrative. Four claims, each backed by a project that is already
+ * in the work grid. No new metrics: the numbers match the briefs.
+ */
+export type HireReason = {
+  key: string;
+  kicker: string;
+  title: string;
+  body: string;
+  metric: string;
+  metricLabel: string;
+  project: string;
+  accent: string;
+  icon: "research" | "trust" | "systems" | "product";
+};
+
+export const hireReasons: HireReason[] = [
+  {
+    key: "research",
+    kicker: "Research depth",
+    title: "I can run the full loop.",
+    body: "Architecture changes, ablations, threshold calibration and a result that survives deployment — not just a notebook score.",
+    metric: "80.72%",
+    metricLabel: "pixel F1 · +1.52 over CVPR '23 DTD",
+    project: "docroi",
+    accent: "#ff6b4a",
+    icon: "research",
+  },
+  {
+    key: "trust",
+    kicker: "Trust & fraud",
+    title: "I know the failure mode.",
+    body: "Impossible CVs, forged documents and adversarial inputs. I optimise for the false alarm and the missed case, not the average.",
+    metric: "0",
+    metricLabel: "honeypots in the top 100",
+    project: "candidate-ranking",
+    accent: "#ff6b4a",
+    icon: "trust",
+  },
+  {
+    key: "systems",
+    kicker: "Systems",
+    title: "I build what carries the model.",
+    body: "Index compression, batched inference, federated training and the latency budget around it. The model is one part of the system.",
+    metric: "74.8%",
+    metricLabel: "smaller 100k-document index",
+    project: "selfindex",
+    accent: "#c8f751",
+    icon: "systems",
+  },
+  {
+    key: "product",
+    kicker: "Product",
+    title: "I can take it to a user.",
+    body: "A real Next.js product with LLM copy, ffmpeg renders, WhatsApp leads, billing and a database — built solo, end to end.",
+    metric: "1080×1920",
+    metricLabel: "real MP4 output · 19 reels",
+    project: "growth-engine",
+    accent: "#fbbf24",
+    icon: "product",
+  },
+];
+
 /** Public Codolio stats, read from codolio.com/profile/hex. */
 export const codolioStats = {
   solved: 87,
@@ -190,19 +255,38 @@ export type DomainKey =
  * Ordered by how likely a hiring manager for remote AI/ML research and
  * applied security roles is to care about the work.
  */
+export type DomainIcon =
+  | "shield"
+  | "sparkles"
+  | "search"
+  | "eye"
+  | "privacy"
+  | "language"
+  | "terminal";
+
 export const domains: {
   key: DomainKey;
   short: string;
   label: string;
   note: string;
   color: string;
+  icon: DomainIcon;
 }[] = [
   {
     key: "security",
-    short: "Security",
-    label: "Security & trust",
-    note: "Fraud, forensics, identity and applied cryptography",
+    short: "Trust",
+    label: "Trust & forensics",
+    note: "Fraud, identity, forensics and applied cryptography",
     color: "#ff6b4a",
+    icon: "shield",
+  },
+  {
+    key: "mlsystems",
+    short: "Applied AI",
+    label: "Applied AI products",
+    note: "Products, forecasting and decisions that ship",
+    color: "#fbbf24",
+    icon: "sparkles",
   },
   {
     key: "retrieval",
@@ -210,41 +294,39 @@ export const domains: {
     label: "Retrieval & RAG",
     note: "Search, ranking and the systems under an LLM",
     color: "#c8f751",
+    icon: "search",
   },
   {
     key: "cv",
-    short: "Edge / Vision",
-    label: "Edge AI & computer vision",
-    note: "Latency-aware segmentation, depth and document pixels",
+    short: "Vision",
+    label: "Edge & vision",
+    note: "Latency-aware segmentation, 3D and document pixels",
     color: "#5eead4",
+    icon: "eye",
   },
   {
     key: "federated",
     short: "Privacy",
-    label: "Federated & privacy",
-    note: "Privacy-preserving collaboration across institutions",
+    label: "Privacy & federated",
+    note: "Learning across institutions without moving data",
     color: "#a78bfa",
-  },
-  {
-    key: "mlsystems",
-    short: "AI systems",
-    label: "AI systems & applied ML",
-    note: "Products, forecasting and the systems that ship",
-    color: "#fbbf24",
+    icon: "privacy",
   },
   {
     key: "nlp",
-    short: "NLP",
-    label: "NLP & language",
+    short: "Language",
+    label: "Language & signals",
     note: "Summarisation, similarity and text signals",
     color: "#60a5fa",
+    icon: "language",
   },
   {
     key: "systems",
     short: "Systems",
-    label: "Systems engineering",
+    label: "Systems foundations",
     note: "The low-level work underneath the models",
     color: "#94a3b8",
+    icon: "terminal",
   },
 ];
 
@@ -288,6 +370,7 @@ export type Project = {
   links: { label: string; href: string }[];
   visual?: "docroi" | "ranking" | "retrieval" | "growth" | "job" | "federated";
   wide?: boolean;
+  lead?: boolean;
 };
 
 export const projects: Project[] = [
@@ -323,6 +406,7 @@ export const projects: Project[] = [
     ],
     visual: "docroi",
     wide: true,
+    lead: true,
   },
   {
     slug: "job-authenticity",
@@ -513,6 +597,7 @@ export const projects: Project[] = [
     ],
     visual: "retrieval",
     wide: true,
+    lead: true,
   },
 
   // ── Computer vision ─────────────────────────────────────────────────────
@@ -532,6 +617,7 @@ export const projects: Project[] = [
       "Per-task loss curves tracked in W&B across segmentation and depth.",
     ],
     metric: { value: "0.907", label: "mIoU · residual U-Net" },
+    lead: true,
     summary:
       "Three U-Net variants compared on a joint segmentation + depth objective — vanilla, no-skip and residual. Residual blocks gave the best mask quality; removing skip connections cost 2 mIoU. Per-task loss curves tracked in W&B.",
     stack: ["PyTorch", "U-Net", "W&B"],
@@ -645,6 +731,7 @@ export const projects: Project[] = [
     ],
     visual: "federated",
     wide: true,
+    lead: true,
   },
 
   // ── ML systems & applied ML ─────────────────────────────────────────────
@@ -674,6 +761,7 @@ export const projects: Project[] = [
     links: [{ label: "Repository", href: "https://github.com/63shivendra/AI_AD_AGENCY" }],
     visual: "growth",
     wide: true,
+    lead: true,
   },
   {
     slug: "demand-forecasting",
@@ -771,6 +859,7 @@ export const projects: Project[] = [
       "Ships with a small interactive Gradio app.",
     ],
     metric: { value: "distilBART", label: "CNN/DailyMail" },
+    lead: true,
     summary:
       "Loads a fine-tuned distilBART checkpoint in bfloat16 to keep memory down, then exposes it as a small interactive app.",
     stack: ["Python", "Transformers", "Gradio"],
@@ -845,6 +934,7 @@ export const projects: Project[] = [
       "Implemented in C++ against POSIX/Linux primitives.",
     ],
     metric: { value: "C++", label: "from syscalls up" },
+    lead: true,
     summary:
       "A custom C++ shell with directory built-ins, persistent history, background processes, chained commands and a pinfo view into any PID.",
     stack: ["C++", "POSIX", "Linux"],
@@ -942,6 +1032,7 @@ export type ExperienceItem = {
   kind: "Current" | "Education" | "Independent" | "Industry";
   summary: string;
   bullets: string[];
+  proofs?: string[];
 };
 
 // CONFIRM: Infosys start year and the exact NPCI scope.
@@ -958,6 +1049,7 @@ export const experience: ExperienceItem[] = [
       "Frame ambiguous risk problems as measurable detection tasks — then evaluate them on precision at fixed recall, false-alarm rate, latency and model size.",
       "Work across research and production: failure analysis, threshold calibration, and the deployment constraints of a payments environment.",
     ],
+    proofs: ["candidate-ranking", "docroi"],
   },
   {
     period: "2025 — Present",
@@ -971,6 +1063,7 @@ export const experience: ExperienceItem[] = [
       "LLM copy generation, an ffmpeg render pipeline, WhatsApp lead capture, CRM and billing in one product.",
       "Next.js 16, TypeScript and Prisma, deployed end to end.",
     ],
+    proofs: ["growth-engine"],
   },
   {
     period: "2022 — 2024",
@@ -984,6 +1077,7 @@ export const experience: ExperienceItem[] = [
       "Worked in a large engineering organisation on production software delivery.",
       "Left to pursue full-time research; qualified GATE and PGEE (PGEE AIR 151).",
     ],
+    proofs: ["posix-shell", "mini-vcs"],
   },
   {
     period: "2024 — 2026",
@@ -998,6 +1092,7 @@ export const experience: ExperienceItem[] = [
       "Built SelfIndex, a from-scratch retrieval engine benchmarked against Elasticsearch.",
       "DocROI-Former: a vision transformer for pixel-level tamper detection and document-level triage.",
     ],
+    proofs: ["selfindex", "docroi"],
   },
 ];
 
@@ -1121,6 +1216,20 @@ export const about = {
     stack: "Python / PyTorch / TypeScript",
   },
 };
+
+/**
+ * A recruiter-readable summary of the whole profile. Keep these values in
+ * sync with `experience` and `about`; they are intentionally short enough to
+ * scan in one pass.
+ */
+export const profileFacts = [
+  { key: "now", label: "Now", value: "Research AI Engineer, NPCI" },
+  { key: "study", label: "Study", value: "M.Tech CS, IIIT Hyderabad · 2024–26" },
+  { key: "before", label: "Before", value: "Power Programmer, Infosys · 2022–24" },
+  { key: "independent", label: "Also", value: "Independent AI engineer, Growth Engine" },
+  { key: "credential", label: "Credential", value: "GATE · PGEE AIR 151" },
+  { key: "base", label: "Base", value: "Hyderabad, India · remote / hybrid" },
+] as const;
 
 export const contact = {
   heading: "Let's make fraud harder.",
